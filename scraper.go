@@ -55,6 +55,7 @@ func scrapeBook(link string) (*Book, error) {
 
 	var pageCount int = 0
 	var isbn string = ""
+	var language string = ""
 	attributeElms := doc.Find("div.pr_attributes").Find("tr")
 	attributeElms.Each(func(i int, s *goquery.Selection) {
 		valueAndKey := s.Find("td")
@@ -75,6 +76,12 @@ func scrapeBook(link string) (*Book, error) {
 		if strings.Contains(attrText, "ISBN") {
 			split := strings.Split(attrText, ":")
 			isbn = split[len(split)-1]
+		}
+
+		// scrape language
+		if strings.Contains(attrText, "Dil") {
+			split := strings.Split(attrText, ":")
+			language = split[len(split)-1]
 		}
 	})
 
@@ -119,6 +126,7 @@ func scrapeBook(link string) (*Book, error) {
 		book := &Book{
 			Id:          slugId,
 			Title:       title,
+			Language:    language,
 			ISBN:        isbn,
 			ImageUrl:    imageUrl,
 			Link:        link,
