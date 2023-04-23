@@ -10,7 +10,7 @@ type Book struct {
 	Link        string     `json:"link"`
 	PageCount   int        `json:"page_count"`
 	Categories  [][]string `json:"categories"`
-	Author      Author     `json:"author"`
+	Authors     []Author   `json:"authors"`
 }
 
 type Author struct {

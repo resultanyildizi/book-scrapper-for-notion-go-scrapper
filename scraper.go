@@ -33,7 +33,9 @@ func _getIdFromLink(link string) (string, string) {
 	uniqePart := linkParts[len(linkParts)-1]
 	uniqeId := strings.Replace(uniqePart, ".html", "", 1)
 	sluggId := sluggPart + "#" + uniqeId
-	return uniqeId, sluggId
+	sluggFix := strings.Split(sluggId, "&")[0]
+
+	return uniqeId, sluggFix
 }
 
 func scrapeBook(link string) (*Book, error) {
@@ -86,15 +88,24 @@ func scrapeBook(link string) (*Book, error) {
 	})
 
 	// scrape author
-	var author *Author = nil
-	authorLink := doc.Find("div.pr_producers__manufacturer").Find("a.pr_producers__link").AttrOr("href", "")
-	if authorLink != "" {
-		athr, authorErr := scrapeAuthor(authorLink)
+	authors := []Author{}
+	authorItemElms := doc.Find("div.pr_producers__manufacturer").Find("div.pr_producers__item")
+	authorItemElms.Each(func(i int, s *goquery.Selection) {
+		print(fmt.Sprintf("index: %d", i))
+		authorLink := s.Find("a.pr_producers__link").AttrOr("href", "")
 
-		if authorErr == nil {
-			author = athr
+		print(authorLink)
+
+		if authorLink != "" {
+			author, authorErr := scrapeAuthor(authorLink)
+
+			if authorErr == nil {
+				authors = append(authors, *author)
+			}
 		}
-	}
+	})
+
+	print(authors)
 
 	// scrape category groups
 	defaultCategory := "Kitap"
@@ -133,11 +144,9 @@ func scrapeBook(link string) (*Book, error) {
 			Categories:  categoryGroups,
 			PageCount:   pageCount,
 			Description: description,
+			Authors:     authors,
 		}
 
-		if author != nil {
-			book.Author = *author
-		}
 		return book, nil
 	}
 
@@ -163,6 +172,10 @@ func scrapeAuthor(link string) (*Author, error) {
 		imageUrl = rgx.FindString(imageUrlAttr)
 		imageUrl = strings.Replace(imageUrl, "(", "", 1)
 		imageUrl = strings.Replace(imageUrl, ")", "", 1)
+	}
+
+	if imageUrl == "" {
+		imageUrl = "http://localhost:4444/author.jpg"
 	}
 	var biography string = ""
 	biographyElm := doc.Find("div#manufacturer-description").Find("p")

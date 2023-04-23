@@ -17,6 +17,7 @@ func main() {
 	router.GET("/", greet)
 	router.GET("/convert/book", convertBook)
 	router.GET("/convert/author", convertAuthor)
+	router.StaticFile("author.jpg", "./static/author.jpg")
 	router.Run(route)
 }
 
