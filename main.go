@@ -18,7 +18,7 @@ func main() {
 
 	// Enable CORS middleware
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://resultanyildizi.site"}
+	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
 	router.Use(cors.New(config))
 
