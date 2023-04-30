@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/asaskevich/govalidator"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,10 +15,19 @@ func main() {
 	route := fmt.Sprintf("%s:%s", host, port)
 
 	router := gin.Default()
+
+	// Enable CORS middleware
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://resultanyildizi.site"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	router.Use(cors.New(config))
+
+	// Define endpoints
 	router.GET("/", greet)
 	router.GET("/convert/book", convertBook)
 	router.GET("/convert/author", convertAuthor)
 	router.StaticFile("author.jpg", "./static/author.jpg")
+
 	router.Run(route)
 }
 

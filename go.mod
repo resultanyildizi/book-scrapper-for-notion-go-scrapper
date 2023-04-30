@@ -2,7 +2,10 @@ module book-scrapper-for-notion
 
 go 1.19
 
-require github.com/gin-gonic/gin v1.9.0
+require (
+	github.com/gin-contrib/cors v1.4.0
+	github.com/gin-gonic/gin v1.9.0
+)
 
 require (
 	github.com/andybalholm/cascadia v1.3.1 // indirect
@@ -34,5 +37,4 @@ require (
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
