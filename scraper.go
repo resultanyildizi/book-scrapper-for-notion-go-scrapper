@@ -91,10 +91,7 @@ func scrapeBook(link string) (*Book, error) {
 	authors := []Author{}
 	authorItemElms := doc.Find("div.pr_producers__manufacturer").Find("div.pr_producers__item")
 	authorItemElms.Each(func(i int, s *goquery.Selection) {
-		print(fmt.Sprintf("index: %d", i))
 		authorLink := s.Find("a.pr_producers__link").AttrOr("href", "")
-
-		print(authorLink)
 
 		if authorLink != "" {
 			author, authorErr := scrapeAuthor(authorLink)
@@ -104,8 +101,6 @@ func scrapeBook(link string) (*Book, error) {
 			}
 		}
 	})
-
-	print(authors)
 
 	// scrape category groups
 	defaultCategory := "Kitap"
@@ -174,8 +169,9 @@ func scrapeAuthor(link string) (*Author, error) {
 		imageUrl = strings.Replace(imageUrl, ")", "", 1)
 	}
 
+	DEFAULT_AUTHOR := "http://bsfn.resultanyildizi.site/author.png"
 	if imageUrl == "" {
-		imageUrl = "http://localhost:4444/author.jpg"
+		imageUrl = DEFAULT_AUTHOR
 	}
 	var biography string = ""
 	biographyElm := doc.Find("div#manufacturer-description").Find("p")
