@@ -10,9 +10,7 @@ import (
 )
 
 func main() {
-	port := "4444"
-	host := "localhost"
-	route := fmt.Sprintf("%s:%s", host, port)
+	route := fmt.Sprintf("[::]:4444")
 
 	router := gin.Default()
 
