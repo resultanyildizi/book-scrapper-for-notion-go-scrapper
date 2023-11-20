@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	route := fmt.Sprintf("[::]:4444")
+	route := fmt.Sprintf("localhost:4444")
 
 	router := gin.Default()
 
